@@ -10,6 +10,7 @@ import com.grab.hackathon.model.PaymentRequest;
 import com.grab.hackathon.model.Transaction;
 import com.grab.hackathon.model.TransactionResult;
 import com.grab.hackathon.model.TransactionStatus;
+import com.grab.hackathon.publisher.SqsPublisher;
 import com.grab.hackathon.repository.PaymentDetailsRepository;
 import com.grab.hackathon.repository.PaymentRepository;
 import com.grab.hackathon.repository.TransactionRepository;
@@ -38,7 +39,11 @@ public class PaymentPlatformService {
     private PaymentRecommendationService recommendationService;
 
     @Autowired
+    private SqsPublisher sqsPublisher;
+
+    @Autowired
     private GrabPlatformService grabPlatformService;
+
 
     public TransactionResult initiatePaymentRequest(PaymentRequest request) throws JsonProcessingException {
         // 1. Fetch User

@@ -41,7 +41,7 @@ public class TransactionController {
     public ResponseEntity<TransactionResult> initiateTransaction(@RequestBody Transaction transaction) {
         boolean isSuccess = new Random().nextBoolean();
         TransactionStatus status = isSuccess ? TransactionStatus.SUCCESS : TransactionStatus.FAILED;
-        return ResponseEntity.ok(new TransactionResult(status));
+        return ResponseEntity.ok(new TransactionResult(status,"Transaction Successful"));
     }
 
 }
