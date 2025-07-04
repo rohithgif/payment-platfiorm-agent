@@ -10,6 +10,7 @@ public class PaymentPlatformAgentApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(PaymentPlatformAgentApplication.class, args);
+		System.out.println("Application is running!!");
 	}
 
 }
