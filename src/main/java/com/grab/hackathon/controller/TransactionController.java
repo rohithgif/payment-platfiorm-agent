@@ -1,6 +1,7 @@
 package com.grab.hackathon.controller;
 
 import com.grab.hackathon.model.Transaction;
+import com.grab.hackathon.model.TransactionResult;
 import com.grab.hackathon.model.TransactionStatus;
 import com.grab.hackathon.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.Random;
 
 @Controller
 @RequestMapping("/v1/transactions")
@@ -33,6 +35,13 @@ public class TransactionController {
     public ResponseEntity<List<Transaction>> getAllTransactions() {
         List<Transaction> transactions = transactionService.getAllTransactions();
         return ResponseEntity.ok(transactions);
+    }
+
+    @PostMapping("/initiate-transaction")
+    public ResponseEntity<TransactionResult> initiateTransaction(@RequestBody Transaction transaction) {
+        boolean isSuccess = new Random().nextBoolean();
+        TransactionStatus status = isSuccess ? TransactionStatus.SUCCESS : TransactionStatus.FAILED;
+        return ResponseEntity.ok(new TransactionResult(status));
     }
 
 }
