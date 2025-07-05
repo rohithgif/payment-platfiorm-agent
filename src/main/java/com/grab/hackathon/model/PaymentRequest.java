@@ -10,7 +10,7 @@ import lombok.Setter;
 public class PaymentRequest {
     private Long userId;
     private Double amount;
-    private String senderAcoountId;
+    private String senderAccountId;
     private String receiverAccountId;
 }
 
