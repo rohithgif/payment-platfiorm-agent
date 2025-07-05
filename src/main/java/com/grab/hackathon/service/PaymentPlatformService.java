@@ -50,6 +50,7 @@ public class PaymentPlatformService {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        UserPaymentOptionDetails
         GrabWallet wallet = user.getGrabWallet();
         if (wallet == null || wallet.getBankCard() == null) {
             throw new RuntimeException("GrabWallet or BankCard not configured for user");
@@ -59,9 +60,6 @@ public class PaymentPlatformService {
         // 2. Save PaymentDetails
         PaymentDetails details = PaymentDetails.builder()
                 .amount(request.getAmount())
-                .deliveryFee(request.getDeliveryFee())
-                .convenienceFee(request.getConvenienceFee())
-                .rideChargeFee(request.getRideChargeFee())
                 .build();
         paymentDetailsRepository.save(details);
 

@@ -29,7 +29,4 @@ public class Bank {
 
     private String bankName;
 
-    @Enumerated(EnumType.STRING)
-    private BankHealthStatus bankServerHealth;
-
 }
