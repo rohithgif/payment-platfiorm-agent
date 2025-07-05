@@ -63,7 +63,7 @@ public class PaymentPlatformService {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        List<UserPaymentOptionDetails> paymentOptions = grabPlatformService.getPaymentOptions(String.valueOf(user.getId()));
+        List<UserPaymentOptionDetails> paymentOptions = grabPlatformService.getPaymentOptions(String.valueOf(user.getUserId()));
 
         // 2. Save PaymentDetails
         PaymentDetails details = PaymentDetails.builder()
