@@ -12,8 +12,7 @@ public class SqsConfig {
     @Bean
     public SqsClient sqsClient() {
         return SqsClient.builder()
-                .region(Region.EU_NORTH_1)
-                .credentialsProvider(ProfileCredentialsProvider.create("grabhackprofile"))
+                .region(Region.US_WEST_2)
                 .build();
     }
 }

@@ -5,6 +5,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.sqs.SqsClient;
 import software.amazon.awssdk.services.sqs.model.SendMessageRequest;
+import software.amazon.awssdk.services.sqs.model.GetQueueUrlRequest;
+import software.amazon.awssdk.services.sqs.model.GetQueueUrlResponse;
 
 @Service
 @RequiredArgsConstructor
@@ -13,7 +15,34 @@ public class SqsPublisher {
     private final SqsClient sqsClient;
 
     @Value("${sqs.queue.url}")
-    private String queueUrl;
+    private String defaultQueueUrl;
+
+    public void publishMessage(String message) {
+        SendMessageRequest sendMsgRequest = SendMessageRequest.builder()
+                .queueUrl(defaultQueueUrl)
+                .messageBody(message)
+                .build();
+
+        sqsClient.sendMessage(sendMsgRequest);
+        System.out.println("Sent message: " + message);
+    }
+
+    public void publishMessageToQueue(String queueName, String message) {
+        // Get queue URL from queue name
+        GetQueueUrlRequest getQueueRequest = GetQueueUrlRequest.builder()
+                .queueName(queueName)
+                .build();
+        GetQueueUrlResponse getQueueResponse = sqsClient.getQueueUrl(getQueueRequest);
+        String queueUrl = getQueueResponse.queueUrl();
+
+        SendMessageRequest sendMsgRequest = SendMessageRequest.builder()
+                .queueUrl(queueUrl)
+                .messageBody(message)
+                .build();
+
+        sqsClient.sendMessage(sendMsgRequest);
+        System.out.println("Sent message to queue " + queueName + ": " + message);
+    }
 
     public void sendMessage(TransactionEvent message) {
         String messageBody;
@@ -25,7 +54,7 @@ public class SqsPublisher {
         }
 
         SendMessageRequest sendMsgRequest = SendMessageRequest.builder()
-                .queueUrl(queueUrl)
+                .queueUrl(defaultQueueUrl)
                 .messageBody(messageBody)
                 .build();
 

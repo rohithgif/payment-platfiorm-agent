@@ -6,10 +6,7 @@ import com.grab.hackathon.entity.GrabWallet;
 import com.grab.hackathon.entity.Payment;
 import com.grab.hackathon.entity.PaymentDetails;
 import com.grab.hackathon.entity.User;
-import com.grab.hackathon.model.PaymentRequest;
-import com.grab.hackathon.model.Transaction;
-import com.grab.hackathon.model.TransactionResult;
-import com.grab.hackathon.model.TransactionStatus;
+import com.grab.hackathon.model.*;
 import com.grab.hackathon.publisher.SqsPublisher;
 import com.grab.hackathon.repository.PaymentDetailsRepository;
 import com.grab.hackathon.repository.PaymentRepository;
@@ -19,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class PaymentPlatformService {
@@ -44,18 +42,32 @@ public class PaymentPlatformService {
     @Autowired
     private GrabPlatformService grabPlatformService;
 
+    /**
+     * Initiates a payment request by performing the following steps:
+     * 1. Fetches the user based on the provided user ID.
+     * 2. Saves the payment details.
+     * 3. Saves the payment record.
+     * 4. Recommends the best payment gateway using PSP and LLM.
+     * 5. Creates a transaction record.
+     * 6. Calls GrabPlatform to execute the transaction.
+     * 7. Saves the transaction with its final status.
+     *
+     * @param request The payment request containing user ID and amount.
+     * @return The result of the transaction initiation.
+     * @throws JsonProcessingException If there is an error processing JSON data.
+     */
+
+
+    @Autowired
+    private PaymentServiceProvider paymentServiceProvider;
+
 
     public TransactionResult initiatePaymentRequest(PaymentRequest request) throws JsonProcessingException {
         // 1. Fetch User
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        UserPaymentOptionDetails
-        GrabWallet wallet = user.getGrabWallet();
-        if (wallet == null || wallet.getBankCard() == null) {
-            throw new RuntimeException("GrabWallet or BankCard not configured for user");
-        }
-        BankCard card = wallet.getBankCard();
+        List<UserPaymentOptionDetails> paymentOptions = paymentServiceProvider.getPaymentOptions(String.valueOf(user.getId()));
 
         // 2. Save PaymentDetails
         PaymentDetails details = PaymentDetails.builder()
@@ -71,7 +83,7 @@ public class PaymentPlatformService {
         paymentRepository.save(payment);
 
         // 4. Get recommended gateway from PSP + LLM
-        String gatewayName = recommendationService.recommendBestPaymentGatewayOption(wallet);
+        String gatewayName = recommendationService.recommendBestPaymentGatewayOption(paymentOptions);
 
         // 5. Create Transaction
         Transaction transaction = Transaction.builder()

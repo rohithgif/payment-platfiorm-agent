@@ -1,9 +1,12 @@
 package com.grab.hackathon.service;
 
 import com.grab.hackathon.model.PSPResponse;
+import com.grab.hackathon.model.UserPaymentOptionDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 @Service
 public class LLMService {
@@ -20,11 +23,7 @@ public class LLMService {
 //        }
 //    }
 
-    public String getBestGatewayRecommendation(PSPResponse pspResponse) {
-        if ("HEALTHY".equalsIgnoreCase(pspResponse.getBankHealthStatus()) &&
-                pspResponse.getOffers().stream().anyMatch(o -> o.getCashbackAmount() > 20)) {
-            return pspResponse.getRecommendedGateway();
-        }
+    public String getBestGatewayRecommendation(List<UserPaymentOptionDetails>paymentOptionDetails) {
         return "FallbackPay";
     }
 }

@@ -5,6 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.JoinColumn;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -21,7 +22,7 @@ import java.time.LocalDate;
 @Data
 @Builder
 @Entity
-public class BankCard extends PaymentMethod {
+public class BankCard {
     @Id
     @GeneratedValue
     private Long bankCardId;
@@ -32,7 +33,12 @@ public class BankCard extends PaymentMethod {
     private String cardType;
 
     @ManyToOne
+    @JoinColumn(name = "bank_id")
     private Bank bank;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     private Boolean cashbackOffered;
 }

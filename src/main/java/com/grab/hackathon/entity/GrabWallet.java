@@ -19,7 +19,7 @@ import lombok.Setter;
 @Data
 @Builder
 @Entity
-public class GrabWallet {
+public class GrabWallet{
     @Id @GeneratedValue
     private Long id;
     private Double amount;
