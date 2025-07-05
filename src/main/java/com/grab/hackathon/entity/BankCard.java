@@ -1,5 +1,6 @@
 package com.grab.hackathon.entity;
 
+import com.grab.hackathon.model.PaymentMethod;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -20,7 +21,7 @@ import java.time.LocalDate;
 @Data
 @Builder
 @Entity
-public class BankCard {
+public class BankCard extends PaymentMethod {
     @Id
     @GeneratedValue
     private Long bankCardId;
@@ -28,9 +29,11 @@ public class BankCard {
     private String bankCardNumber;
     private LocalDate endingDate;
     private String cvv;
-    private Double cashbackOffered;
+    private String cardType;
 
     @ManyToOne
     private Bank bank;
+
+    private Boolean cashbackOffered;
 }
 

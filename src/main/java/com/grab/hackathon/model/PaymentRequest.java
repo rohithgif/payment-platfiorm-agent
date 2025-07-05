@@ -10,8 +10,5 @@ import lombok.Setter;
 public class PaymentRequest {
     private Long userId;
     private Double amount;
-    private Double deliveryFee;
-    private Double convenienceFee;
-    private Double rideChargeFee;
 }
 

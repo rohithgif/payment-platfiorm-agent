@@ -1,5 +1,6 @@
 package com.grab.hackathon.entity;
 
+import com.grab.hackathon.model.PaymentMethod;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -19,12 +20,7 @@ import lombok.Setter;
 @Builder
 @Entity
 public class GrabWallet {
-    @Id
-    @GeneratedValue
-    private Long gwId;
-
+    @Id @GeneratedValue
+    private Long id;
     private Double amount;
-
-    @OneToOne
-    private BankCard bankCard;
 }
