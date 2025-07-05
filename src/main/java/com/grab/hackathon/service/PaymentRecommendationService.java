@@ -21,6 +21,7 @@ public class PaymentRecommendationService {
     public String recommendBestPaymentGatewayOption(List<UserPaymentOptionDetails> paymentOptions){
 
         // Step 3: Return the final gateway (from LLM)
-        return llmService.getBestGatewayRecommendation(paymentOptions);
+//        return llmService.getBestGatewayRecommendation(paymentOptions);
+         return "Go with Paypal";
     }
 }

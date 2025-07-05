@@ -11,8 +11,8 @@ public class Paypal extends UserPaymentOptionDetails {
     private String emailId;
 
     @Builder
-    public Paypal(String userId, String paymentOptionId, int paypalId, String emailId) {
-        super(userId, paymentOptionId);
+    public Paypal(String userId, String paymentOptionId, int paypalId, String emailId, OffersDetails offersDetails) {
+        super(userId, paymentOptionId, offersDetails);
         this.paypalId = paypalId;
         this.emailId = emailId;
     }

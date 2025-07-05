@@ -13,8 +13,8 @@ public class Neft extends UserPaymentOptionDetails {
     private String ifscCode;
 
     @Builder
-    public Neft(String userId, String paymentOptionId, String neftId, String bankName, String accountNumber, String ifscCode) {
-        super(userId, paymentOptionId);
+    public Neft(String userId, String paymentOptionId, String neftId, String bankName, String accountNumber, String ifscCode, OffersDetails offersDetails) {
+        super(userId, paymentOptionId, offersDetails);
         this.neftId = neftId;
         this.bankName = bankName;
         this.accountNumber = accountNumber;

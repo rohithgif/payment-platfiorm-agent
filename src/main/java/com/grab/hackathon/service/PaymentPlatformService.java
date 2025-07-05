@@ -58,16 +58,12 @@ public class PaymentPlatformService {
      */
 
 
-    @Autowired
-    private PaymentServiceProvider paymentServiceProvider;
-
-
     public TransactionResult initiatePaymentRequest(PaymentRequest request) throws JsonProcessingException {
         // 1. Fetch User
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        List<UserPaymentOptionDetails> paymentOptions = paymentServiceProvider.getPaymentOptions(String.valueOf(user.getId()));
+        List<UserPaymentOptionDetails> paymentOptions = grabPlatformService.getPaymentOptions(String.valueOf(user.getId()));
 
         // 2. Save PaymentDetails
         PaymentDetails details = PaymentDetails.builder()

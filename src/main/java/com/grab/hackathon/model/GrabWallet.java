@@ -11,8 +11,8 @@ public class GrabWallet extends UserPaymentOptionDetails {
     private double balance;
 
     @Builder
-    public GrabWallet(String userId, String paymentOptionId, int walletId, double balance) {
-        super(userId, paymentOptionId);
+    public GrabWallet(String userId, String paymentOptionId, int walletId, double balance, OffersDetails offersDetails) {
+        super(userId, paymentOptionId, offersDetails);
         this.walletId = walletId;
         this.balance = balance;
     }

@@ -18,27 +18,6 @@ public class PaymentServiceProvider {
     @Autowired
     private RestTemplate restTemplate;
 
-    public static List<UserPaymentOptionDetails>  getPaymentOptions(String userId) {
-        List<UserPaymentOptionDetails> options = new ArrayList<>();
-
-        // Add mock Paypal
-        Paypal paypal = new Paypal(userId, "PAYPAL_1", 1, "user@paypal.com");
-        options.add(paypal);
-
-        // Add mock Card
-        Card card = new Card(userId, "CARD_1", 1, 1234567890);
-        options.add(card);
-
-        // Add mock GrabWallet
-        Wallet wallet = new Wallet(userId, "WALLET_1", 1);
-        options.add(wallet);
-
-        // Add mock NEFT
-        Neft neft = new Neft(userId, "NEFT_1", "NEFT001", "Mock Bank", "1234567890", "BANK0001");
-        options.add(neft);
-
-        return options;
-    }
     public PSPResponse callPSPLambda(BankCard card) {
         // ✅ Create mock offers
         OffersDetails offer1 = OffersDetails.builder()

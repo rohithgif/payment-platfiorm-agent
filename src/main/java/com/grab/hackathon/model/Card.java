@@ -11,8 +11,8 @@ public class Card extends UserPaymentOptionDetails {
     private int cardNumber;
 
     @Builder
-    public Card(String userId, String paymentOptionId, int cardId, int cardNumber) {
-        super(userId, paymentOptionId);
+    public Card(String userId, String paymentOptionId, int cardId, int cardNumber, OffersDetails offersDetails) {
+        super(userId, paymentOptionId,offersDetails);
         this.cardId = cardId;
         this.cardNumber = cardNumber;
     }
