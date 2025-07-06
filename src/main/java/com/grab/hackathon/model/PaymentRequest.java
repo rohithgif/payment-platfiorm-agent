@@ -12,5 +12,6 @@ public class PaymentRequest {
     private Double amount;
     private String senderAccountId;
     private String receiverAccountId;
+    private String paymentType;
 }
 

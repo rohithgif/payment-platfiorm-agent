@@ -36,15 +36,10 @@ public class GrabPlatformService {
         try {
             result = transactionController.initiateTransaction(transaction).getBody();
         } catch (Exception e) {
-            result = new TransactionResult(
-                    TransactionStatus.FAILED,
-                    e
-            );
+            result = new TransactionResult(TransactionStatus.FAILED,"What does GrabPaymentPlatformService do?");
+            sqsPublisher.sendMessage(new TransactionEvent(result));
+
         }
-
-        // Publish event to SQS
-        sqsPublisher.sendMessage(new TransactionEvent(result));
-
         return result;
     }
 

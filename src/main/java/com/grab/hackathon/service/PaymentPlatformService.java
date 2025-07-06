@@ -1,6 +1,8 @@
 package com.grab.hackathon.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.grab.hackathon.entity.BankCard;
 import com.grab.hackathon.entity.GrabWallet;
 import com.grab.hackathon.entity.Payment;
@@ -58,7 +60,7 @@ public class PaymentPlatformService {
      */
 
 
-    public TransactionResult initiatePaymentRequest(PaymentRequest request) throws JsonProcessingException {
+    public Object initiatePaymentRequest(PaymentRequest request) throws JsonProcessingException {
         // 1. Fetch User
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
@@ -79,8 +81,11 @@ public class PaymentPlatformService {
         paymentRepository.save(payment);
 
         // 4. Get recommended gateway from PSP + LLM
-        String gatewayName = recommendationService.recommendBestPaymentGatewayOption(paymentOptions);
-
+        String recommendBestPaymentGatewayOption = recommendationService.recommendBestPaymentGatewayOption(paymentOptions);
+        ObjectMapper objectMapper = new ObjectMapper();
+        JsonNode node = objectMapper.readTree(recommendBestPaymentGatewayOption);
+        String paymentId = node.get("payment_id").asText();
+        String offerDescription = node.get("offer_description").asText();
         // 5. Create Transaction
         Transaction transaction = Transaction.builder()
                 .payment(payment)
@@ -89,14 +94,13 @@ public class PaymentPlatformService {
                 .transactionDate(LocalDateTime.now())
                 .createdAt(LocalDateTime.now())
                 .createdBy("system")
+                .paymentType(request.getPaymentType())
                 .build();
 
         // 6. Call GrabPlatform to execute transaction
-        TransactionResult result = grabPlatformService.initiateTransaction(transaction);
+        Object result = grabPlatformService.initiateTransaction(transaction);
 
         // 7. Save Transaction with final status
-        transaction.setTransactionStatus(result.getStatus() != null ? result.getStatus() : TransactionStatus.FAILED);
-        transactionRepository.save(transaction);
 
         return result;
     }

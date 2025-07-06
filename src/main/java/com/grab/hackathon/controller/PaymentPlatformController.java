@@ -19,8 +19,8 @@ public class PaymentPlatformController {
     private PaymentPlatformService paymentPlatformService;
 
     @PostMapping("/initiate-payment")
-    public ResponseEntity<TransactionResult> initiatePayment(@RequestBody PaymentRequest request) throws JsonProcessingException {
-        TransactionResult result = paymentPlatformService.initiatePaymentRequest(request);
+    public ResponseEntity<Object> initiatePayment(@RequestBody PaymentRequest request) throws JsonProcessingException {
+        Object result = paymentPlatformService.initiatePaymentRequest(request);
         return ResponseEntity.ok(result);
     }
 }

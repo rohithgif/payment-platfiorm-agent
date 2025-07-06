@@ -31,15 +31,13 @@ public class PaymentRecommendationService {
 
     public String recommendBestPaymentGatewayOption(List<UserPaymentOptionDetails> paymentOptions) {
         try {
-            // Create list to hold payment option details
             List<Map<String, Object>> paymentOptionsList = new ArrayList<>();
 
-
-            // Extract relevant information from each payment option
+            // Prepare flattened payment options
             for (UserPaymentOptionDetails option : paymentOptions) {
                 Map<String, Object> optionMap = new HashMap<>();
                 optionMap.put("payment_id", option.getPaymentOptionId());
-                
+
                 OffersDetails offers = option.getOffersDetails();
                 if (offers != null) {
                     optionMap.put("cashback_amount", offers.getCashbackAmount());
@@ -49,33 +47,27 @@ public class PaymentRecommendationService {
                 paymentOptionsList.add(optionMap);
             }
 
+            // Create request body
             Map<String, Object> requestBody = new HashMap<>();
-            requestBody.put("options", paymentOptions);
+            requestBody.put("options", paymentOptionsList);
 
-// Convert request body to JSON string
+            // Convert to JSON string (for curl printout)
             String jsonBody = objectMapper.writeValueAsString(requestBody);
 
-// Log equivalent curl
-            String curlCommand = String.format(
-                    "curl -X POST http://localhost:8000/api/query-payment-option-recommendation/ \\\n" +
-                            "  -H \"Content-Type: application/json\" \\\n" +
-                            "  -d '%s'",
-                    jsonBody.replace("'", "'\\''")
-            );
             System.out.println("Equivalent curl command:");
-            System.out.println(curlCommand);
 
-// Set headers
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
 
-// Create HTTP entity
-            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+// Send raw JSON string as request body
+            HttpEntity<String> entity = new HttpEntity<>(jsonBody, headers);
 
-// Make API call
             RestTemplate restTemplate = new RestTemplate();
             String url = "http://localhost:8000/api/query-payment-option-recommendation/";
-            return restTemplate.postForObject(url, entity, String.class);
+            String response = restTemplate.postForObject(url, entity, String.class);
+            return response;
+
+
         } catch (Exception e) {
             System.out.println("Error calling recommendation API: " + e.getMessage());
             return "Go with PayPal (fallback recommendation)";

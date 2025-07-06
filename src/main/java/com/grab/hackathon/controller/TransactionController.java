@@ -39,8 +39,7 @@ public class TransactionController {
 
     @PostMapping("/initiate-transaction")
     public ResponseEntity<TransactionResult> initiateTransaction(@RequestBody Transaction transaction) {
-        boolean isSuccess = new Random().nextBoolean();
-        if (!isSuccess) {
+        if (transaction.getPaymentType() .equals("Exception")) {
             throw new RuntimeException("Transaction failed due to internal Visa Card Network call");
         }
         TransactionStatus status = TransactionStatus.SUCCESS;

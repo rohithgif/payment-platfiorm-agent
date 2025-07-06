@@ -38,4 +38,6 @@ public class Transaction {
     @ManyToOne
     @JoinColumn(name = "payment_id")
     private Payment payment;
+
+    private String paymentType;
 }
